@@ -1,0 +1,42 @@
+
+
+// 1. useEffect()
+
+when we are using useEffect we directly pass the axios inside  the useEffect function which is not a good practice. we have to declare function for axios operation specially .
+then we wrap the function inside the useEffect() . and try to use async/await instead of .then() 
+
+// using .then() 
+
+const [a,setA]=useState([]);
+useEffect(()=>{
+const fetchData=()=>{
+     axios.get("url")
+      .then(res=>{
+        setA(res.data);
+        })
+      .catch((error)=>{
+        console.log(error);
+      })
+}
+    fetchData();
+},[])
+
+console.log(a);
+
+
+
+// using async/await
+
+const [a,setA]=useState([]);
+useEffect(()=>{
+const fetchData=async()=>{
+  try{
+    const response=await axios.get("url");
+    setA(response.data);
+  }
+  catch(error){
+    console.log(error);  
+  }
+}
+fetchData();
+},[])
