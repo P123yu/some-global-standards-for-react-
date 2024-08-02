@@ -40,3 +40,104 @@ const fetchData=async()=>{
 }
 fetchData();
 },[])
+
+
+// ====================================================================   function sharing between the component in react 
+
+const add1 = () => {
+  return 1 + 2;
+};
+
+const add2 = () => {
+  return 5 + 2;
+};
+
+export { add1, add2 }; // Export functions individually
+
+
+-----------------------------------------------------------
+
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { add1 } from './m'; // Adjust import if the path is different
+
+function App() {
+  const [info, setInfo] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          'https://jsonplaceholder.typicode.com/users/1'
+        );
+        setInfo(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  console.log(info, 'info');
+  console.log(add1()); // Use console.log to print the result of add1
+
+  return (
+    <div className="text-2xl">
+      <p>hello</p>
+      <p>Result of add1: {add1()}</p> {/* Render the result of add1 */}
+    </div>
+  );
+}
+
+export default App;
+
+
+
+=================================================================================== vvi ===============================================================================================
+
+// m.jsx
+
+import axios from "axios";
+
+const fetchUser = async () => {
+  try {
+    const response = await axios.get(
+      "https://jsonplaceholder.typicode.com/users"
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export { fetchUser };
+
+
+-------------------------------------------------------------------------------
+
+
+import React, { useEffect, useState } from "react";
+import { fetchUser } from "./m";
+function App() {
+  const [info, setInfo] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const getUser = async () => {
+      const data = await fetchUser();
+      if (data) {
+        setInfo(data);
+      } else {
+        setError("Error fetching data");
+      }
+    };
+    getUser();
+  }, []);
+
+  console.log(info, "info");
+  return <div className="text-2xl">hello</div>;
+}
+
+export default App;
+
